@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 require("dotenv").config();
 const app = express();
@@ -38,12 +38,13 @@ async function run() {
     res.send(cards);
   });
 
+  app.delete("/cards/:id", async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: ObjectId(id) };
 
-  app.delete('/cards/:id',async(req,res)=>{
-const id = req.params.id
-
-console.log('delete..........');
-  })
+    const result = await cardCollection.deleteOne(query);
+    res.send(result);
+  });
 }
 
 run().catch((err) => console.log(err));
